@@ -11,7 +11,7 @@ event0_accumulated_frame_topic: "/dvs/event_frame"  # accumulated frame topic's 
 event0_accumulation_method: 1     # 0: by time, 1: by count
 event0_count_window_size: 12000
 event0_time_window_size: 33       # ms
-event0_decay_function: 0          # 0: None, 1: Linear, 2: Exponential, 3: Step
+event0_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event0_decay_param: 0.000001       # us
 event0_min_potential: 0
 event0_max_potential: 1
