@@ -21,9 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   )
 
 ## System dependencies are found with CMake's conventions
-set(BOOST_ROOT /home/kehan/Libraries/boost_1_77_0)
-set(Boost_NO_SYSTEM_PATHS ON)
-find_package(Boost 1.73 REQUIRED COMPONENTS nowide filesystem program_options)
+find_package(Boost REQUIRED COMPONENTS filesystem)
 find_package(OpenCV 3.3.1 REQUIRED)
 find_package(dv REQUIRED)
 find_package(fmt 7.0.3 REQUIRED)
