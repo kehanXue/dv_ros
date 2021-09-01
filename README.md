@@ -16,7 +16,7 @@ Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to pr
 
 ## Demo
 
-<img src="/home/kehan/demo.gif" alt="demo" style="zoom:50%;" />
+<img src="assets/demo.gif" alt="demo" style="zoom:25%;" />
 
 ## Build 
 
