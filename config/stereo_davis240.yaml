@@ -1,41 +1,3 @@
-# dv_ros
-
-> ROS package for iniVation Dynamic Vision System's dv-sdk.
-
-Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to process event streams in ROS.
-
-## Build 
-
-1. Install the [iniVation dv-runtime](https://gitlab.com/inivation/dv/dv-runtime) on your computer firstly. You may need to prepare the high version fmt (>=7.0.3) library and Boost (>=1.73) library.
-
-2. Clone the repository in your ROS Workspace, can then just build it.
-
-## Usage
-
-Use the prepared config file: davis240.yaml: 
-
-```shell
-roslaunch dv_ros davis240.launch
-```
-
-or
-
-```shell
-rosrun dv_ros dv_ros_node /path/to/the/davis240.yaml
-```
-
-## Parameters
-
-You can process multiple event streams in one ros_node, 
-the parameter `num_of_event_stream` specific the number of event streams you want to process.
-The event stream can be capture from different device, such as DAVIS or CeleX.
-Then you can config different parameters for each stream by using `eventN_` formulation.
-
-The meaning of accumulate parameters can be found [here](https://inivation.gitlab.io/dv/dv-docs/docs/accumulator-module/).
-
-Below is an example config file for stereo davis346 with different config:
-
-```yaml
 %YAML:1.0
 
 num_of_event_stream: 2
@@ -73,4 +35,3 @@ event1_neutral_potential: 0
 event1_event_contribution: 0.04
 event1_rectify_polarity: 0    # enable: 1, disable: 0
 event1_synchronous_decay: 0   # enable: 1, disable: 0
-```
