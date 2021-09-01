@@ -4,6 +4,20 @@
 
 Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to process event streams in ROS.
 
+## Feature
+
+1. Use dv-sdk `accumulator` functions in ROS.
+   
+2. Use `rqt_reconfigure` to modify the accumulating parameters online.
+
+3. Support `dvs_msgs/Event` and `celex_msgs/Event` message.
+
+4. Process multiple event streams in one ROS node, and config different parameters for each stream.
+
+## Demo
+
+<img src="/home/kehan/demo.gif" alt="demo" style="zoom:50%;" />
+
 ## Build 
 
 1. Install the `iniVation dv-runtime` on your computer firstly. 
