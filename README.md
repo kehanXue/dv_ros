@@ -6,7 +6,11 @@ Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to pr
 
 ## Build 
 
-1. Install the [iniVation dv-runtime](https://gitlab.com/inivation/dv/dv-runtime) on your computer firstly. You may need to prepare the high version fmt (>=7.0.3) library and Boost (>=1.73) library.
+1. Install the `iniVation dv-runtime` on your computer firstly. 
+   
+   - Binary installation steps can be found [here](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/#ubuntu-linux). 
+     
+   - For source code installation, you can follow the steps [here](https://gitlab.com/inivation/dv/dv-runtime). High version of fmt (>=7.0.3) library and Boost (>=1.73) library are required.
 
 2. Clone the repository in your ROS Workspace, can then just build it.
 
