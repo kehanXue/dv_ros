@@ -11,8 +11,8 @@ namespace dv_ros {
 
 EventCollector::EventCollector(EventCollectorOptions options)
     : options_(std::move(options)),
-      accumulator_(options_.accumulator_options_),
       nh_("~") {
+  accumulator_ = std::make_shared<Accumulator>(options_.accumulator_options_);
   if (options_.device_type == EventDeviceType::DAVIS) {
     subscriber_ =
         nh_.subscribe<dvs_msgs::EventArray>(
@@ -30,9 +30,7 @@ EventCollector::EventCollector(EventCollectorOptions options)
   }
 }
 
-EventCollector::~EventCollector() {
-
-}
+EventCollector::~EventCollector() = default;
 
 void EventCollector::EventsCallback(
     const dvs_msgs::EventArrayConstPtr& events_msg) {
@@ -50,7 +48,11 @@ void EventCollector::ProcessEvents(const EventType& events) {
   for (auto event : events->events) {
     dv_events_.add(ToDVEvent(ToEvent(event)));
   }
-  accumulator_.AddNewEvents(dv_events_);
+  accumulator_->AddNewEvents(dv_events_);
+}
+
+std::shared_ptr<Accumulator> EventCollector::GetMutableAccumulator() {
+  return accumulator_;
 }
 
 }  // namespace dv_ros

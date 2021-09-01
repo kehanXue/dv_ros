@@ -5,7 +5,7 @@
 #ifndef DV_ROS_DV_ROS_ACCUMULATOR_ACCUMULATOR_H_
 #define DV_ROS_DV_ROS_ACCUMULATOR_ACCUMULATOR_H_
 
-#include <mutex>
+#include <memory>
 #include <opencv2/opencv.hpp>
 
 #include <ros/ros.h>
@@ -20,9 +20,11 @@ namespace dv_ros {
 
 class Accumulator {
  public:
-  explicit Accumulator(AccumulatorOptions options);
+  explicit Accumulator(const AccumulatorOptions& options);
   virtual ~Accumulator();
   void AddNewEvents(const dv::EventStore& event_store);
+  std::shared_ptr<AccumulatorOptions> GetMutableOptions();
+  bool UpdateConfig();
 
  private:
   void DoPerFrameTime(const dv::EventStore& events);
@@ -30,8 +32,7 @@ class Accumulator {
   void ElaborateFrame(const dv::EventStore& events);
   void PublishFrame();
 
-  AccumulatorOptions options_;
-  std::mutex mu_corrected_frame_;
+  std::shared_ptr<AccumulatorOptions> options_;
   cv::Mat corrected_frame_;
   dv::EventStreamSlicer slicer_;
   dv::Accumulator accumulator_;

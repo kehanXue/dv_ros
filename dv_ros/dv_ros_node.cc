@@ -2,7 +2,8 @@
 // Created by kehan on 2021/9/1.
 //
 
-#include "event_collectors.h"
+#include "dv_ros/event_collectors.h"
+#include "dv_ros/dynamic_configurator.h"
 
 namespace dv_ros {
 
@@ -16,6 +17,7 @@ void Run(const std::string& config_file) {
     return;
   }
   EventCollectors event_collectors(options);
+  DynamicConfigurator dynamic_configurator(event_collectors);
   ros::spin();
 }
 

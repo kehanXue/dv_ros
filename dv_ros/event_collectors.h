@@ -13,6 +13,7 @@ namespace dv_ros {
 class EventCollectors {
  public:
   explicit EventCollectors(EventCollectorsOptions options);
+  const std::vector<std::shared_ptr<EventCollector>>& GetCollectors() const;
  private:
   EventCollectorsOptions options_;
   std::vector<std::shared_ptr<EventCollector>> collectors_;

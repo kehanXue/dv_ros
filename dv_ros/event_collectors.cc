@@ -17,4 +17,9 @@ EventCollectors::EventCollectors(EventCollectorsOptions options)
   }
 }
 
+const std::vector<std::shared_ptr<EventCollector>>&
+EventCollectors::GetCollectors() const {
+  return collectors_;
+}
+
 }  // namespace dv_ros

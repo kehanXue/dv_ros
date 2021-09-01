@@ -5,6 +5,8 @@
 #ifndef DV_ROS_DV_ROS_EVENT_COLLECTOR_H_
 #define DV_ROS_DV_ROS_EVENT_COLLECTOR_H_
 
+#include <memory>
+
 #include <ros/ros.h>
 #include <dvs_msgs/EventArray.h>
 #include <celex5_msgs/EventVector.h>
@@ -18,8 +20,9 @@ namespace dv_ros {
 
 class EventCollector {
  public:
-  EventCollector(EventCollectorOptions  options);
+  explicit EventCollector(EventCollectorOptions options);
   virtual ~EventCollector();
+  std::shared_ptr<Accumulator> GetMutableAccumulator();
 
  private:
   void EventsCallback(const dvs_msgs::EventArrayConstPtr& events_msg);
@@ -31,7 +34,7 @@ class EventCollector {
   EventCollectorOptions options_;
   ros::NodeHandle nh_;
   ros::Subscriber subscriber_;
-  Accumulator accumulator_;
+  std::shared_ptr<Accumulator> accumulator_;
 };
 
 }  // namespace dv_ros

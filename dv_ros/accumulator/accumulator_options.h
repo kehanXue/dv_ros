@@ -26,7 +26,7 @@ struct AccumulatorOptions {
   int frame_height;
   AccumulationMethod accumulation_method;
   int count_window_size;
-  double time_window_size;
+  int time_window_size;
   DecayFunction decay_function;
   float decay_param;
   float min_potential;
