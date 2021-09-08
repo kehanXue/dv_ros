@@ -177,7 +177,9 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
                     option,
                     _1),
         "If the events\' speed is lower than this value, "
-        "do not add new events in the accumulator. units events/s");
+        "do not add new events in the accumulator. units events/s",
+        0,
+        30000);
     ++event_index;
   }
   ddr_.publishServicesTopics();
