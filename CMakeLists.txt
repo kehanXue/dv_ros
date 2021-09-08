@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(dv_ros)
 
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++17)
 
