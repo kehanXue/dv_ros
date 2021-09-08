@@ -6,17 +6,17 @@ Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to pr
 
 ## Feature
 
-1. Use dv-sdk `accumulator` functions in ROS.
+1. Use dv-sdk [`accumulator`](https://inivation.gitlab.io/dv/dv-docs/docs/accumulator-module/) functions in ROS.
    
 2. Use `rqt_reconfigure` to modify the accumulating parameters online.
 
-3. Support `dvs_msgs/Event` and `celex_msgs/Event` message.
+3. Support [`dvs_msgs/EventArray`](https://github.com/uzh-rpg/rpg_dvs_ros/blob/master/dvs_msgs/msg/EventArray.msg) and [`celex_msgs/EventVector`](https://github.com/kehanXue/CeleX5-ROS/blob/master/celex5_msgs/msg/EventVector.msg) event stream message.
 
 4. Process multiple event streams in one ROS node, and config different parameters for each stream.
 
 ## Demo
 
-<img src="/home/kehan/demo.gif" alt="demo" style="zoom:50%;" />
+<img src="assets/demo.gif" alt="demo" style="zoom:25%;" />
 
 ## Build 
 
