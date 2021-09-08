@@ -24,7 +24,7 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
                       options_->min_potential,
                       options_->rectify_polarity);
   if (options_->accumulation_method == AccumulationMethod::BY_TIME) {
-    accumulation_time_ = options_->time_window_size * 1000;
+    accumulation_time_ = options_->time_window_size * 1e6;
     slice_job_ =
         slicer_.doEveryTimeInterval(
             accumulation_time_,
@@ -93,7 +93,7 @@ std::shared_ptr<AccumulatorOptions> Accumulator::GetMutableOptions() {
 bool Accumulator::UpdateConfig() {
   if (options_->accumulation_method == AccumulationMethod::BY_TIME) {
     slicer_.modifyTimeInterval(slice_job_,
-                               options_->time_window_size * 1000);
+                               options_->time_window_size * 1e6);
   } else if (options_->accumulation_method == AccumulationMethod::BY_COUNT) {
     slicer_.modifyNumberInterval(slice_job_,
                                  options_->count_window_size);
