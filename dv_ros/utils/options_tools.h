@@ -19,6 +19,10 @@ inline std::string eventI_accumulated_frame_topic(size_t event_index) {
   return "event" + std::to_string(event_index) + "_accumulated_frame_topic";
 }
 
+inline std::string eventI_no_motion_threshold(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_no_motion_threshold";
+}
+
 inline std::string eventI_frame_width(size_t event_index) {
   return "event" + std::to_string(event_index) + "_frame_width";
 }

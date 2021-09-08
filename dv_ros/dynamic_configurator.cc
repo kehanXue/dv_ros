@@ -169,6 +169,15 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
                     option,
                     _1),
         "If this value is set, decay happens in continous time for all pixels.");
+    ddr_.registerVariable<int>(
+        eventI_no_motion_threshold(event_index),
+        option->no_motion_threshold,
+        boost::bind(&DynamicConfigurator::EventINoMotionCb,
+                    accumulator,
+                    option,
+                    _1),
+        "If the events\' speed is lower than this value, "
+        "do not add new events in the accumulator. units events/s");
     ++event_index;
   }
   ddr_.publishServicesTopics();
@@ -263,6 +272,14 @@ void DynamicConfigurator::EventISynchronousDecayCb(
     bool new_value) {
   options->synchronous_decay = new_value;
   accumulator->UpdateConfig();
+}
+
+void DynamicConfigurator::EventINoMotionCb(
+    const std::shared_ptr<Accumulator>& accumulator,
+    const std::shared_ptr<
+        AccumulatorOptions>& options,
+    int new_value) {
+  options->no_motion_threshold = new_value;
 }
 
 }  // namespace dv_ros

@@ -74,6 +74,7 @@ event0_neutral_potential: 0.5
 event0_event_contribution: 0.15
 event0_rectify_polarity: 0    # enable: 1, disable: 0
 event0_synchronous_decay: 0   # enable: 1, disable: 0
+event0_no_motion_threshold: 1000      # rate: events/s
 
 event1_device_type: 0                   # 0: davis, 1: celex
 event1_topic: "/dvs/right/events"
@@ -91,4 +92,5 @@ event1_neutral_potential: 0
 event1_event_contribution: 0.04
 event1_rectify_polarity: 0    # enable: 1, disable: 0
 event1_synchronous_decay: 0   # enable: 1, disable: 0
+event1_no_motion_threshold: 1000          # rate: events/s
 ```

@@ -32,6 +32,7 @@ class Accumulator {
   void DoPerAddEventData();
   void ElaborateFrame(const dv::EventStore& events);
   void PublishFrame();
+  bool IsNoMotion(const dv::EventStore& events);
 
   std::shared_ptr<AccumulatorOptions> options_;
   cv::Mat corrected_frame_;

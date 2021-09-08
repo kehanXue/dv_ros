@@ -16,7 +16,7 @@ EventCollectorOptions CreateEventCollectorOptions(
       static_cast<EventDeviceType>(
           static_cast<int>(config_file_parser[eventI_device_type(event_index)]));
   config_file_parser[eventI_topic(event_index)] >> options.event_topic;
-  options.accumulator_options_ =
+  options.accumulator_options =
       CreateAccumulatorOptions(config_file_parser, event_index);
   return options;
 }

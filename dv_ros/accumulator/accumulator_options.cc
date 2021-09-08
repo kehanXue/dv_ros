@@ -42,6 +42,8 @@ AccumulatorOptions CreateAccumulatorOptions(
       config_file_parser[eventI_synchronous_decay(event_index)];
   config_file_parser[eventI_accumulated_frame_topic(event_index)]
       >> options.accumulated_frame_topic;
+  options.no_motion_threshold =
+      config_file_parser[eventI_no_motion_threshold(event_index)];
   return options;
 }
 

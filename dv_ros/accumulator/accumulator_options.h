@@ -37,6 +37,7 @@ struct AccumulatorOptions {
   int rectify_polarity;
   int synchronous_decay;
   std::string accumulated_frame_topic;
+  int no_motion_threshold;
 };
 
 AccumulatorOptions CreateAccumulatorOptions(

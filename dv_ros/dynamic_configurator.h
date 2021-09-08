@@ -65,6 +65,10 @@ class DynamicConfigurator {
       const std::shared_ptr<Accumulator>& accumulator,
       const std::shared_ptr<AccumulatorOptions>& options,
       bool new_value);
+  static void EventINoMotionCb(
+      const std::shared_ptr<Accumulator>& accumulator,
+      const std::shared_ptr<AccumulatorOptions>& options,
+      int new_value);
 
   ros::NodeHandle nh_;
   ddynamic_reconfigure::DDynamicReconfigure ddr_;

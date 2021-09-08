@@ -44,6 +44,9 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
 Accumulator::~Accumulator() = default;
 
 void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
+  if (IsNoMotion(event_store)) {
+    return;
+  }
   if (options_->accumulation_method == AccumulationMethod::BY_TIME ||
       options_->accumulation_method == AccumulationMethod::BY_COUNT) {
     slicer_.accept(event_store);
@@ -102,6 +105,16 @@ void Accumulator::PublishFrame() {
                                   corrected_frame_).toImageMsg();
   frame->header.stamp = ros::Time().fromNSec(current_frame_time_);
   accumulated_frame_pub_.publish(frame);
+}
+
+bool Accumulator::IsNoMotion(const dv::EventStore& events) {
+  auto event_rate = 1.0 * events.getTotalLength() /
+      ((events.back().timestamp() - events.front().timestamp()) / 1e9);
+  if (event_rate < options_->no_motion_threshold) {
+    ROS_INFO("The event camera doesn't move this time...");
+    return true;
+  }
+  return false;
 }
 
 std::shared_ptr<AccumulatorOptions> Accumulator::GetMutableOptions() {
