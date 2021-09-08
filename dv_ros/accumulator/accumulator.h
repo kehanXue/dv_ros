@@ -29,6 +29,7 @@ class Accumulator {
  private:
   void DoPerFrameTime(const dv::EventStore& events);
   void DoPerEventNumber(const dv::EventStore& events);
+  void DoPerAddEventData();
   void ElaborateFrame(const dv::EventStore& events);
   void PublishFrame();
 
@@ -39,6 +40,7 @@ class Accumulator {
   int64_t accumulation_time_ = -1;
   int64_t current_frame_time_ = -1;
   int slice_job_;
+  dv::EventStore event_store_;
 
   ros::NodeHandle nh_;
   ros::Publisher accumulated_frame_pub_;

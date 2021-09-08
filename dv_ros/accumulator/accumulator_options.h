@@ -11,7 +11,8 @@ namespace dv_ros {
 
 enum class AccumulationMethod {
   BY_TIME = 0,
-  BY_COUNT
+  BY_COUNT,
+  BY_EVENTS_HZ_AND_COUNT
 };
 
 enum class DecayFunction {

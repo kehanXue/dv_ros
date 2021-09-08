@@ -16,6 +16,9 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
   std::map<std::string, int> accumulation_method_by_count_map = {
       {"BY_COUNT", 1}
   };
+  std::map<std::string, int> accumulation_method_by_hz_count_map = {
+      {"BY_EVENTS_HZ_AND_COUNT", 2}
+  };
   std::map<std::string, int> decay_function_map = {
       {"NONE", 0},
       {"LINEAR", 1},
@@ -57,6 +60,27 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
                       _1),
           "Method of accumulating events data",
           accumulation_method_by_count_map);
+      ddr_.registerVariable<int>(
+          eventI_count_window_size(event_index),
+          option->count_window_size,
+          boost::bind(&DynamicConfigurator::EventICountWindowSizeCb,
+                      accumulator,
+                      option,
+                      _1),
+          "Count window for accumulating, unit. num of event",
+          1000,
+          200000);
+    } else if (option->accumulation_method
+        == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
+      ddr_.registerEnumVariable<int>(
+          eventI_accumulation_method(event_index),
+          static_cast<int>(option->accumulation_method),
+          boost::bind(&DynamicConfigurator::EventIAccumulationMethodCb,
+                      accumulator,
+                      option,
+                      _1),
+          "Method of accumulating events data",
+          accumulation_method_by_hz_count_map);
       ddr_.registerVariable<int>(
           eventI_count_window_size(event_index),
           option->count_window_size,
