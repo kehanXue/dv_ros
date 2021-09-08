@@ -12,7 +12,7 @@ namespace dv_ros {
 EventCollector::EventCollector(EventCollectorOptions options)
     : options_(std::move(options)),
       nh_("~") {
-  accumulator_ = std::make_shared<Accumulator>(options_.accumulator_options_);
+  accumulator_ = std::make_shared<Accumulator>(options_.accumulator_options);
   if (options_.device_type == EventDeviceType::DAVIS) {
     subscriber_ =
         nh_.subscribe<dvs_msgs::EventArray>(

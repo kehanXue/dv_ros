@@ -29,8 +29,10 @@ class Accumulator {
  private:
   void DoPerFrameTime(const dv::EventStore& events);
   void DoPerEventNumber(const dv::EventStore& events);
+  void DoPerAddEventData();
   void ElaborateFrame(const dv::EventStore& events);
   void PublishFrame();
+  bool IsNoMotion(const dv::EventStore& events);
 
   std::shared_ptr<AccumulatorOptions> options_;
   cv::Mat corrected_frame_;
@@ -39,6 +41,7 @@ class Accumulator {
   int64_t accumulation_time_ = -1;
   int64_t current_frame_time_ = -1;
   int slice_job_;
+  dv::EventStore event_store_;
 
   ros::NodeHandle nh_;
   ros::Publisher accumulated_frame_pub_;

@@ -11,7 +11,8 @@ namespace dv_ros {
 
 enum class AccumulationMethod {
   BY_TIME = 0,
-  BY_COUNT
+  BY_COUNT,
+  BY_EVENTS_HZ_AND_COUNT
 };
 
 enum class DecayFunction {
@@ -36,6 +37,7 @@ struct AccumulatorOptions {
   int rectify_polarity;
   int synchronous_decay;
   std::string accumulated_frame_topic;
+  int no_motion_threshold;
 };
 
 AccumulatorOptions CreateAccumulatorOptions(

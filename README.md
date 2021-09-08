@@ -63,7 +63,7 @@ event0_topic: "/dvs/left/events"
 event0_frame_width: 346
 event0_frame_height: 260
 event0_accumulated_frame_topic: "/dvs/left/event_frame"  # accumulated frame topic's name, for publishing
-event0_accumulation_method: 1     # 0: by time, 1: by count
+event0_accumulation_method: 2     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
 event0_count_window_size: 12000
 event0_time_window_size: 33       # ms
 event0_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
@@ -74,13 +74,14 @@ event0_neutral_potential: 0.5
 event0_event_contribution: 0.15
 event0_rectify_polarity: 0    # enable: 1, disable: 0
 event0_synchronous_decay: 0   # enable: 1, disable: 0
+event0_no_motion_threshold: 1000      # rate: events/s
 
 event1_device_type: 0                   # 0: davis, 1: celex
 event1_topic: "/dvs/right/events"
 event1_frame_width: 346
 event1_frame_height: 260
 event1_accumulated_frame_topic: "/dvs/right/event_frame"  # accumulated frame topic's name, for publishing
-event1_accumulation_method: 1     # 0: by time, 1: by count
+event1_accumulation_method: 0     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
 event1_count_window_size: 12000
 event1_time_window_size: 33       # ms
 event1_decay_function: 2          # 0: None, 1: Linear, 2: Exponential, 3: Step
@@ -91,4 +92,5 @@ event1_neutral_potential: 0
 event1_event_contribution: 0.04
 event1_rectify_polarity: 0    # enable: 1, disable: 0
 event1_synchronous_decay: 0   # enable: 1, disable: 0
+event1_no_motion_threshold: 1000          # rate: events/s
 ```

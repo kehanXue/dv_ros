@@ -4,8 +4,6 @@
 
 #include "dv_ros/accumulator/accumulator.h"
 
-#include <utility>
-
 namespace dv_ros {
 
 Accumulator::Accumulator(const AccumulatorOptions& options)
@@ -24,7 +22,7 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
                       options_->min_potential,
                       options_->rectify_polarity);
   if (options_->accumulation_method == AccumulationMethod::BY_TIME) {
-    accumulation_time_ = options_->time_window_size * 1000;
+    accumulation_time_ = options_->time_window_size * 1e6;
     slice_job_ =
         slicer_.doEveryTimeInterval(
             accumulation_time_,
@@ -46,7 +44,19 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
 Accumulator::~Accumulator() = default;
 
 void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
-  slicer_.accept(event_store);
+  if (IsNoMotion(event_store)) {
+    return;
+  }
+  if (options_->accumulation_method == AccumulationMethod::BY_TIME ||
+      options_->accumulation_method == AccumulationMethod::BY_COUNT) {
+    slicer_.accept(event_store);
+  } else if (options_->accumulation_method
+      == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
+    event_store_.add(event_store);
+    DoPerAddEventData();
+  } else {
+    ROS_ERROR("Unrecognized accumulation method selected");
+  }
 }
 
 void Accumulator::DoPerFrameTime(const dv::EventStore& events) {
@@ -58,9 +68,21 @@ void Accumulator::DoPerFrameTime(const dv::EventStore& events) {
 }
 
 void Accumulator::DoPerEventNumber(const dv::EventStore& events) {
-  // TODO Maybe events.getHighestTime();
-  current_frame_time_ = events.getLowestTime();
+  current_frame_time_ = events.getHighestTime();
   ElaborateFrame(events);
+}
+
+void Accumulator::DoPerAddEventData() {
+  if (event_store_.getTotalLength() <= options_->count_window_size) {
+    current_frame_time_ = event_store_.getHighestTime();
+    ElaborateFrame(event_store_);
+  } else {
+    event_store_ = event_store_.slice(
+        event_store_.getTotalLength() - options_->count_window_size,
+        options_->count_window_size);
+    current_frame_time_ = event_store_.getHighestTime();
+    ElaborateFrame(event_store_);
+  }
 }
 
 void Accumulator::ElaborateFrame(const dv::EventStore& events) {
@@ -81,9 +103,18 @@ void Accumulator::PublishFrame() {
   auto frame = cv_bridge::CvImage(std_msgs::Header(),
                                   "mono8",
                                   corrected_frame_).toImageMsg();
-  frame->header.stamp =
-      ros::Time().fromNSec(current_frame_time_);
+  frame->header.stamp = ros::Time().fromNSec(current_frame_time_);
   accumulated_frame_pub_.publish(frame);
+}
+
+bool Accumulator::IsNoMotion(const dv::EventStore& events) {
+  auto event_rate = 1.0 * events.getTotalLength() /
+      ((events.back().timestamp() - events.front().timestamp()) / 1e9);
+  if (event_rate < options_->no_motion_threshold) {
+    ROS_INFO("The event camera doesn't move this time...");
+    return true;
+  }
+  return false;
 }
 
 std::shared_ptr<AccumulatorOptions> Accumulator::GetMutableOptions() {
@@ -93,7 +124,7 @@ std::shared_ptr<AccumulatorOptions> Accumulator::GetMutableOptions() {
 bool Accumulator::UpdateConfig() {
   if (options_->accumulation_method == AccumulationMethod::BY_TIME) {
     slicer_.modifyTimeInterval(slice_job_,
-                               options_->time_window_size * 1000);
+                               options_->time_window_size * 1e6);
   } else if (options_->accumulation_method == AccumulationMethod::BY_COUNT) {
     slicer_.modifyNumberInterval(slice_job_,
                                  options_->count_window_size);

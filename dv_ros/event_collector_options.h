@@ -23,11 +23,11 @@ enum class EventDeviceType {
 struct EventCollectorOptions {
   EventDeviceType device_type;
   std::string event_topic;
-  AccumulatorOptions accumulator_options_;
+  AccumulatorOptions accumulator_options;
 };
 
 EventCollectorOptions CreateEventCollectorOptions(
-    const cv::FileStorage &config_file_parser,
+    const cv::FileStorage& config_file_parser,
     size_t event_index);
 
 }  // namespace dv_ros
