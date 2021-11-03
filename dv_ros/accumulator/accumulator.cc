@@ -52,8 +52,11 @@ void Accumulator::AddNewEvents(dv::EventStore& event_store) {
     slicer_.accept(event_store);
   } else if (options_->accumulation_method
       == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
-    FastMotionCheck(event_store);
-    event_store_.add(event_store);
+    if (FastMotionCheck(event_store)) {
+      event_store_ = event_store;
+    } else {
+      event_store_.add(event_store);
+    }
     DoPerAddEventData();
   } else {
     ROS_ERROR("Unrecognized accumulation method selected");

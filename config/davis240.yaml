@@ -20,5 +20,5 @@ event0_rectify_polarity: 1    # enable: 1, disable: 0
 event0_synchronous_decay: 0   # enable: 1, disable: 0
 event0_no_motion_threshold: 1000      # rate: events/s
 event0_fast_motion_threshold: 30000   # events number in one packet
-event0_window_size_factor: 200000000  # n^2 * k, 0 < k < 1; the result window size is (window_size_factor / events_number)
-event0_contribution_factor: 1.5e-4 # k/n, k > 1; the result contribution is (raw_contribution * events_number * contribution_factor)
+event0_window_size_factor: 300000000  # n^2 * k, 0 < k < 1; the result window size is (window_size_factor / events_number)
+event0_contribution_factor: 5e-5 # k/n, k > 1; the result contribution is (raw_contribution * events_number * contribution_factor)
