@@ -22,7 +22,7 @@ class Accumulator {
  public:
   explicit Accumulator(const AccumulatorOptions& options);
   virtual ~Accumulator();
-  void AddNewEvents(const dv::EventStore& event_store);
+  void AddNewEvents(dv::EventStore& event_store);
   std::shared_ptr<AccumulatorOptions> GetMutableOptions();
   bool UpdateConfig();
 
@@ -33,6 +33,7 @@ class Accumulator {
   void ElaborateFrame(const dv::EventStore& events);
   void PublishFrame();
   bool IsNoMotion(const dv::EventStore& events);
+  bool FastMotionCheck(dv::EventStore& event_store);
 
   std::shared_ptr<AccumulatorOptions> options_;
   cv::Mat corrected_frame_;

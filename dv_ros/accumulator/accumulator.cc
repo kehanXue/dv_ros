@@ -43,7 +43,7 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
 
 Accumulator::~Accumulator() = default;
 
-void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
+void Accumulator::AddNewEvents(dv::EventStore& event_store) {
   if (IsNoMotion(event_store)) {
     return;
   }
@@ -52,6 +52,7 @@ void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
     slicer_.accept(event_store);
   } else if (options_->accumulation_method
       == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
+    FastMotionCheck(event_store);
     event_store_.add(event_store);
     DoPerAddEventData();
   } else {
@@ -139,6 +140,26 @@ bool Accumulator::UpdateConfig() {
   accumulator_.setRectifyPolarity(options_->rectify_polarity);
   accumulator_.setSynchronousDecay(options_->synchronous_decay);
   return true;
+}
+
+bool Accumulator::FastMotionCheck(dv::EventStore& event_store) {
+  if (event_store.size() >= options_->fast_motion_threshold) {
+    auto fast_window_size = options_->window_size_factor / event_store.size();
+    options_->event_contribution =
+        options_->raw_event_contribution * event_store.size()
+            * options_->contribution_factor;
+    UpdateConfig();
+    event_store = event_store.slice(
+        event_store.getTotalLength() - fast_window_size,
+        fast_window_size);
+    return true;
+  } else {
+    if (options_->event_contribution != options_->raw_event_contribution) {
+      options_->event_contribution = options_->raw_event_contribution;
+      UpdateConfig();
+    }
+    return false;
+  }
 }
 
 }  // namespace dv_ros

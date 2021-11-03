@@ -8,14 +8,17 @@ event0_frame_width: 240
 event0_frame_height: 180
 event0_accumulated_frame_topic: "/dvs/event_frame"  # accumulated frame topic's name, for publishing
 event0_accumulation_method: 2     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
-event0_count_window_size: 12000
+event0_count_window_size: 18000   # n
 event0_time_window_size: 33       # ms
 event0_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event0_decay_param: 0.000001       # us
 event0_min_potential: 0
 event0_max_potential: 1
-event0_neutral_potential: 0.5
-event0_event_contribution: 0.15
-event0_rectify_polarity: 0    # enable: 1, disable: 0
+event0_neutral_potential: 0
+event0_event_contribution: 0.15  # c
+event0_rectify_polarity: 1    # enable: 1, disable: 0
 event0_synchronous_decay: 0   # enable: 1, disable: 0
 event0_no_motion_threshold: 1000      # rate: events/s
+event0_fast_motion_threshold: 30000   # events number in one packet
+event0_window_size_factor: 200000000  # n^2 * k, 0 < k < 1; the result window size is (window_size_factor / events_number)
+event0_contribution_factor: 1.5e-4 # k/n, k > 1; the result contribution is (raw_contribution * events_number * contribution_factor)

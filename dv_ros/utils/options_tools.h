@@ -75,4 +75,17 @@ inline std::string eventI_synchronous_decay(size_t event_index) {
   return "event" + std::to_string(event_index) + "_synchronous_decay";
 }
 
+inline std::string eventI_window_size_factor(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_window_size_factor";
+}
+
+inline std::string eventI_contribution_factor(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_contribution_factor";
+}
+
+inline std::string eventI_fast_motion_threshold(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_fast_motion_threshold";
+}
+
+
 #endif //DV_ROS_DV_ROS_UTILS_OPTIONS_TOOLS_H_

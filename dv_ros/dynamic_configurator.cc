@@ -180,6 +180,37 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
         "do not add new events in the accumulator. units events/s",
         0,
         30000);
+    ddr_.registerVariable<int>(
+        eventI_fast_motion_threshold(event_index),
+        option->fast_motion_threshold,
+        boost::bind(&DynamicConfigurator::EventIFastMotionCb,
+                    accumulator,
+                    option,
+                    _1),
+        "If the events\' number per packet larger than this value, "
+        "do perform the fast motion processing.",
+        0,
+        200000);
+    ddr_.registerVariable<int>(
+        eventI_window_size_factor(event_index),
+        option->window_size_factor,
+        boost::bind(&DynamicConfigurator::EventIWindowSizeFactorCb,
+                    accumulator,
+                    option,
+                    _1),
+        "n^2 * k, 0 < k < 1. when fast motion",
+        1e6,
+        1e8);
+    ddr_.registerVariable<double>(
+        eventI_contribution_factor(event_index),
+        option->contribution_factor,
+        boost::bind(&DynamicConfigurator::EventIContributionFactorCb,
+                    accumulator,
+                    option,
+                    _1),
+        "k/n, k > 1. when fast motion",
+        0,
+        1e-3);
     ++event_index;
   }
   ddr_.publishServicesTopics();
@@ -256,6 +287,7 @@ void DynamicConfigurator::EventIEventContributionCb(
     const std::shared_ptr<Accumulator>& accumulator,
     const std::shared_ptr<AccumulatorOptions>& options,
     double new_value) {
+  options->raw_event_contribution = new_value;
   options->event_contribution = new_value;
   accumulator->UpdateConfig();
 }
@@ -278,10 +310,30 @@ void DynamicConfigurator::EventISynchronousDecayCb(
 
 void DynamicConfigurator::EventINoMotionCb(
     const std::shared_ptr<Accumulator>& accumulator,
-    const std::shared_ptr<
-        AccumulatorOptions>& options,
+    const std::shared_ptr<AccumulatorOptions>& options,
     int new_value) {
   options->no_motion_threshold = new_value;
+}
+
+void DynamicConfigurator::EventIFastMotionCb(
+    const std::shared_ptr<Accumulator>& accumulator,
+    const std::shared_ptr<AccumulatorOptions>& options,
+    int new_value) {
+  options->fast_motion_threshold = new_value;
+}
+
+void DynamicConfigurator::EventIWindowSizeFactorCb(
+    const std::shared_ptr<Accumulator>& accumulator,
+    const std::shared_ptr<AccumulatorOptions>& options,
+    int new_value) {
+  options->window_size_factor = new_value;
+}
+
+void DynamicConfigurator::EventIContributionFactorCb(
+    const std::shared_ptr<Accumulator>& accumulator,
+    const std::shared_ptr<AccumulatorOptions>& options,
+    double new_value) {
+  options->contribution_factor = new_value;
 }
 
 }  // namespace dv_ros

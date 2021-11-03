@@ -44,11 +44,11 @@ void EventCollector::EventsCallback(
 
 template <typename EventType>
 void EventCollector::ProcessEvents(const EventType& events) {
-  dv::EventStore dv_events_;
+  dv::EventStore dv_events;
   for (auto event : events->events) {
-    dv_events_.add(ToDVEvent(ToEvent(event)));
+    dv_events.add(ToDVEvent(ToEvent(event)));
   }
-  accumulator_->AddNewEvents(dv_events_);
+  accumulator_->AddNewEvents(dv_events);
 }
 
 std::shared_ptr<Accumulator> EventCollector::GetMutableAccumulator() {

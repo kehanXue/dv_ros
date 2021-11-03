@@ -69,6 +69,18 @@ class DynamicConfigurator {
       const std::shared_ptr<Accumulator>& accumulator,
       const std::shared_ptr<AccumulatorOptions>& options,
       int new_value);
+  static void EventIFastMotionCb(
+      const std::shared_ptr<Accumulator>& accumulator,
+      const std::shared_ptr<AccumulatorOptions>& options,
+      int new_value);
+  static void EventIWindowSizeFactorCb(
+      const std::shared_ptr<Accumulator>& accumulator,
+      const std::shared_ptr<AccumulatorOptions>& options,
+      int new_value);
+  static void EventIContributionFactorCb(
+      const std::shared_ptr<Accumulator>& accumulator,
+      const std::shared_ptr<AccumulatorOptions>& options,
+      double new_value);
 
   ros::NodeHandle nh_;
   ddynamic_reconfigure::DDynamicReconfigure ddr_;

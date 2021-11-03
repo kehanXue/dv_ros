@@ -36,6 +36,7 @@ AccumulatorOptions CreateAccumulatorOptions(
       config_file_parser[eventI_neutral_potential(event_index)];
   options.event_contribution =
       config_file_parser[eventI_event_contribution(event_index)];
+  options.raw_event_contribution = options.event_contribution;
   options.rectify_polarity =
       config_file_parser[eventI_rectify_polarity(event_index)];
   options.synchronous_decay =
@@ -44,6 +45,12 @@ AccumulatorOptions CreateAccumulatorOptions(
       >> options.accumulated_frame_topic;
   options.no_motion_threshold =
       config_file_parser[eventI_no_motion_threshold(event_index)];
+  options.fast_motion_threshold =
+      config_file_parser[eventI_fast_motion_threshold(event_index)];
+  options.window_size_factor =
+      config_file_parser[eventI_window_size_factor(event_index)];
+  options.contribution_factor =
+      config_file_parser[eventI_contribution_factor(event_index)];
   return options;
 }
 

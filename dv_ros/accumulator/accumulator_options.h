@@ -34,10 +34,14 @@ struct AccumulatorOptions {
   float max_potential;
   float neutral_potential;
   float event_contribution;
+  float raw_event_contribution;
   int rectify_polarity;
   int synchronous_decay;
   std::string accumulated_frame_topic;
   int no_motion_threshold;
+  int fast_motion_threshold;
+  int window_size_factor;
+  double contribution_factor;
 };
 
 AccumulatorOptions CreateAccumulatorOptions(
