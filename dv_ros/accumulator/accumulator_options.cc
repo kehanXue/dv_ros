@@ -44,6 +44,12 @@ AccumulatorOptions CreateAccumulatorOptions(
       >> options.accumulated_frame_topic;
   options.no_motion_threshold =
       config_file_parser[eventI_no_motion_threshold(event_index)];
+  options.use_knoise =
+      config_file_parser[eventI_use_knoise(event_index)];
+  if (options.use_knoise) {
+    options.k_noise_options =
+        CreateKNoiseOptions(config_file_parser, event_index);
+  }
   return options;
 }
 

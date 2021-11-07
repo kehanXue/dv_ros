@@ -9,6 +9,9 @@ namespace dv_ros {
 Accumulator::Accumulator(const AccumulatorOptions& options)
     : nh_("~") {
   options_ = std::make_shared<AccumulatorOptions>(options);
+  if (options_->use_knoise) {
+    k_noise_filter_ = std::make_shared<KNoise>(options_->k_noise_options);
+  }
   accumulated_frame_pub_ =
       nh_.advertise<sensor_msgs::Image>(options_->accumulated_frame_topic, 2);
   accumulator_ =
@@ -43,7 +46,7 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
 
 Accumulator::~Accumulator() = default;
 
-void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
+void Accumulator::AddNewEvents(dv::EventStore& event_store) {
   if (IsNoMotion(event_store)) {
     return;
   }
@@ -53,6 +56,9 @@ void Accumulator::AddNewEvents(const dv::EventStore& event_store) {
   } else if (options_->accumulation_method
       == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
     event_store_.add(event_store);
+    if (options_->use_knoise) {
+      k_noise_filter_->ProcessEvents(event_store_);
+    }
     DoPerAddEventData();
   } else {
     ROS_ERROR("Unrecognized accumulation method selected");
@@ -86,6 +92,12 @@ void Accumulator::DoPerAddEventData() {
 }
 
 void Accumulator::ElaborateFrame(const dv::EventStore& events) {
+  // if (options_->use_knoise) {
+  //   dv::EventStore event_store = events;
+  //   k_noise_filter_->ProcessEvents(event_store);
+  //   accumulator_.accumulate(event_store);
+  // } else {
+  // }
   accumulator_.accumulate(events);
   // generate frame
   auto frame = accumulator_.generateFrame();
@@ -108,6 +120,9 @@ void Accumulator::PublishFrame() {
 }
 
 bool Accumulator::IsNoMotion(const dv::EventStore& events) {
+  if (events.isEmpty()) {
+    return true;
+  }
   auto event_rate = 1.0 * events.getTotalLength() /
       ((events.back().timestamp() - events.front().timestamp()) / 1e9);
   if (event_rate < options_->no_motion_threshold) {

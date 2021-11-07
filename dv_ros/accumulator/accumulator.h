@@ -15,6 +15,7 @@
 #include "dv-sdk/processing.hpp"
 
 #include "dv_ros/accumulator/accumulator_options.h"
+#include "dv_ros/knoise/k_noise.h"
 
 namespace dv_ros {
 
@@ -22,7 +23,7 @@ class Accumulator {
  public:
   explicit Accumulator(const AccumulatorOptions& options);
   virtual ~Accumulator();
-  void AddNewEvents(const dv::EventStore& event_store);
+  void AddNewEvents(dv::EventStore& event_store);
   std::shared_ptr<AccumulatorOptions> GetMutableOptions();
   bool UpdateConfig();
 
@@ -45,6 +46,8 @@ class Accumulator {
 
   ros::NodeHandle nh_;
   ros::Publisher accumulated_frame_pub_;
+
+  std::shared_ptr<KNoise> k_noise_filter_;
 };
 
 }  // namespace dv_ros
