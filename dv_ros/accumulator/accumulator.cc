@@ -3,6 +3,7 @@
 //
 
 #include "dv_ros/accumulator/accumulator.h"
+#include "dv_ros/utils/tic_toc.h"
 
 namespace dv_ros {
 
@@ -108,6 +109,7 @@ void Accumulator::ElaborateFrame(const dv::EventStore& events) {
   double shift_factor =
       -static_cast<double>(accumulator_.getMinPotential()) * scale_factor;
   frame.convertTo(corrected_frame_, CV_8U, scale_factor, shift_factor);
+
   PublishFrame();
 }
 
