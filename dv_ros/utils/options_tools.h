@@ -75,4 +75,16 @@ inline std::string eventI_synchronous_decay(size_t event_index) {
   return "event" + std::to_string(event_index) + "_synchronous_decay";
 }
 
+inline std::string eventI_knoise_delta_t(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_knoise_delta_t";
+}
+
+inline std::string eventI_knoise_supporters(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_knoise_supporters";
+}
+
+inline std::string eventI_use_knoise(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_use_knoise";
+}
+
 #endif //DV_ROS_DV_ROS_UTILS_OPTIONS_TOOLS_H_

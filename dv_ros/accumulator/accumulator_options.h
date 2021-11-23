@@ -6,6 +6,7 @@
 #define DV_ROS_DV_ROS_ACCUMULATOR_ACCUMULATOR_OPTIONS_H_
 
 #include <opencv2/opencv.hpp>
+#include "dv_ros/knoise/k_noise_options.h"
 
 namespace dv_ros {
 
@@ -38,6 +39,8 @@ struct AccumulatorOptions {
   int synchronous_decay;
   std::string accumulated_frame_topic;
   int no_motion_threshold;
+  int use_knoise;
+  KNoiseOptions k_noise_options;
 };
 
 AccumulatorOptions CreateAccumulatorOptions(

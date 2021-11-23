@@ -6,6 +6,7 @@
 
 #include <utility>
 #include "dv_ros/event.h"
+#include "utils/tic_toc.h"
 
 namespace dv_ros {
 
@@ -34,7 +35,18 @@ EventCollector::~EventCollector() = default;
 
 void EventCollector::EventsCallback(
     const dvs_msgs::EventArrayConstPtr& events_msg) {
+  // TicToc tic_toc;
+  // static long num = 0;
+  // static double avg_time = 0;
   ProcessEvents(events_msg);
+  // auto current_time_cost = tic_toc.toc();
+  // avg_time += current_time_cost;
+  // num++;
+  // std::cout << "avg time cost: " << avg_time / num << " ms of " << num
+  //           << " events packet "
+  //           << "current time cost: " << current_time_cost << "ms "
+  //           << "current events number: " << events_msg->events.size()
+  //           << std::endl;
 }
 
 void EventCollector::EventsCallback(
@@ -45,8 +57,21 @@ void EventCollector::EventsCallback(
 template <typename EventType>
 void EventCollector::ProcessEvents(const EventType& events) {
   dv::EventStore dv_events_;
-  for (auto event : events->events) {
-    dv_events_.add(ToDVEvent(ToEvent(event)));
+  if ((options_.accumulator_options.accumulation_method
+      == AccumulationMethod::BY_COUNT ||
+      options_.accumulator_options.accumulation_method
+          == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) &&
+      events->events.size()
+          > options_.accumulator_options.count_window_size) {
+    for (size_t i = events->events.size()
+        - options_.accumulator_options.count_window_size;
+         i < events->events.size(); ++i) {
+      dv_events_.add(ToDVEvent(ToEvent(events->events.at(i))));
+    }
+  } else {
+    for (auto event : events->events) {
+      dv_events_.add(ToDVEvent(ToEvent(event)));
+    }
   }
   accumulator_->AddNewEvents(dv_events_);
 }
