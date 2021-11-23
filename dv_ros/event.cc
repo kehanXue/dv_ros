@@ -19,7 +19,7 @@ Event ToEvent(const celex5_msgs::Event& celex_event) {
   Event event;
   event.x = celex_event.y;
   event.y = celex_event.x;
-  event.ts = ros::Time().fromNSec(celex_event.timestamp);
+  event.ts = ros::Time().fromNSec(celex_event.off_pixel_timestamp);
   event.polarity = celex_event.polarity;
   event.brightness = celex_event.brightness;
   return event;
