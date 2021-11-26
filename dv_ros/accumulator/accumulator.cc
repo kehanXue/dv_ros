@@ -49,7 +49,8 @@ Accumulator::~Accumulator() = default;
 
 void Accumulator::AddNewEvents(dv::EventStore& event_store) {
   if (IsNoMotion(event_store)) {
-    PublishFrame(ros::Time::now().toNSec());
+    current_frame_time_ = event_store.getHighestTime();
+    PublishFrame(current_frame_time_);
     return;
   }
   if (options_->accumulation_method == AccumulationMethod::BY_TIME ||
