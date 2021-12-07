@@ -26,7 +26,9 @@ Use [dv-sdk](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) to pr
      
    - For source code installation, you can follow the steps [here](https://gitlab.com/inivation/dv/dv-runtime). High version of fmt (>=7.0.3) library and Boost (>=1.73) library are required.
 
-2. Clone the repository in your ROS Workspace, can then just build it.
+2. Check the [celex5_msgs](https://github.com/kehanXue/CeleX5-ROS/tree/master/celex5_msgs) and [dvs_msgs](https://github.com/uzh-rpg/rpg_dvs_ros/tree/master/dvs_msgs) dependence. If you don't have them, just clone and add the msgs package into your ROS workspace.
+   
+3. Clone the repository in your ROS Workspace, can then just build it.
 
 ## Usage
 
