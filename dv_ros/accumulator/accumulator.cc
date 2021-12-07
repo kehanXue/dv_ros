@@ -34,10 +34,10 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
                 std::bind(&Accumulator::DoPerFrameTime,
                           this,
                           std::placeholders::_1)));
-  } else if (options_->accumulation_method == AccumulationMethod::BY_COUNT) {
+  } else if (options_->accumulation_method == AccumulationMethod::BY_NUMBER) {
     slice_job_ =
         slicer_.doEveryNumberOfEvents(
-            options_->count_window_size,
+            options_->number_window_size,
             std::function<void(const dv::EventStore&)>(
                 std::bind(&Accumulator::DoPerEventNumber,
                           this,
@@ -54,10 +54,10 @@ void Accumulator::AddNewEvents(dv::EventStore& event_store) {
     return;
   }
   if (options_->accumulation_method == AccumulationMethod::BY_TIME ||
-      options_->accumulation_method == AccumulationMethod::BY_COUNT) {
+      options_->accumulation_method == AccumulationMethod::BY_NUMBER) {
     slicer_.accept(event_store);
   } else if (options_->accumulation_method
-      == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
+      == AccumulationMethod::BY_EVENTS_HZ_AND_NUMBER) {
     event_store_.add(event_store);
     if (options_->use_knoise) {
       k_noise_filter_->ProcessEvents(event_store_);
@@ -82,13 +82,13 @@ void Accumulator::DoPerEventNumber(const dv::EventStore& events) {
 }
 
 void Accumulator::DoPerAddEventData() {
-  if (event_store_.getTotalLength() <= options_->count_window_size) {
+  if (event_store_.getTotalLength() <= options_->number_window_size) {
     current_frame_time_ = event_store_.getHighestTime();
     ElaborateFrame(event_store_);
   } else {
     event_store_ = event_store_.slice(
-        event_store_.getTotalLength() - options_->count_window_size,
-        options_->count_window_size);
+        event_store_.getTotalLength() - options_->number_window_size,
+        options_->number_window_size);
     current_frame_time_ = event_store_.getHighestTime();
     ElaborateFrame(event_store_);
   }
@@ -144,9 +144,9 @@ bool Accumulator::UpdateConfig() {
   if (options_->accumulation_method == AccumulationMethod::BY_TIME) {
     slicer_.modifyTimeInterval(slice_job_,
                                options_->time_window_size * 1e6);
-  } else if (options_->accumulation_method == AccumulationMethod::BY_COUNT) {
+  } else if (options_->accumulation_method == AccumulationMethod::BY_NUMBER) {
     slicer_.modifyNumberInterval(slice_job_,
-                                 options_->count_window_size);
+                                 options_->number_window_size);
   }
   accumulator_.setDecayFunction(
       static_cast<dv::Accumulator::Decay>(options_->decay_function));

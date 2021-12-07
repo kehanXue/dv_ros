@@ -19,8 +19,8 @@ AccumulatorOptions CreateAccumulatorOptions(
   options.accumulation_method =
       static_cast<AccumulationMethod>
       ((int) config_file_parser[eventI_accumulation_method(event_index)]);
-  options.count_window_size =
-      config_file_parser[eventI_count_window_size(event_index)];
+  options.number_window_size =
+      config_file_parser[eventI_number_window_size(event_index)];
   options.time_window_size =
       config_file_parser[eventI_time_window_size(event_index)];
   options.decay_function =

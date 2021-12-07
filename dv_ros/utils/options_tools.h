@@ -31,8 +31,8 @@ inline std::string eventI_frame_height(size_t event_index) {
   return "event" + std::to_string(event_index) + "_frame_height";
 }
 
-inline std::string eventI_count_window_size(size_t event_index) {
-  return "event" + std::to_string(event_index) + "_count_window_size";
+inline std::string eventI_number_window_size(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_number_window_size";
 }
 
 inline std::string eventI_accumulation_method(size_t event_index) {

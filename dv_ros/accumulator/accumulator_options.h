@@ -12,8 +12,8 @@ namespace dv_ros {
 
 enum class AccumulationMethod {
   BY_TIME = 0,
-  BY_COUNT,
-  BY_EVENTS_HZ_AND_COUNT
+  BY_NUMBER,
+  BY_EVENTS_HZ_AND_NUMBER
 };
 
 enum class DecayFunction {
@@ -27,7 +27,7 @@ struct AccumulatorOptions {
   int frame_width;
   int frame_height;
   AccumulationMethod accumulation_method;
-  int count_window_size;
+  int number_window_size;
   int time_window_size;
   DecayFunction decay_function;
   float decay_param;

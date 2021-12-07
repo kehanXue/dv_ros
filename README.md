@@ -63,8 +63,8 @@ event0_topic: "/dvs/left/events"
 event0_frame_width: 346
 event0_frame_height: 260
 event0_accumulated_frame_topic: "/dvs/left/event_frame"  # accumulated frame topic's name, for publishing
-event0_accumulation_method: 2     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
-event0_count_window_size: 12000
+event0_accumulation_method: 2     # 0: by time, 1: by number, 2: time window is sync with events data hz, by number
+event0_number_window_size: 12000
 event0_time_window_size: 33       # ms
 event0_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event0_decay_param: 0.000001       # us
@@ -81,8 +81,8 @@ event1_topic: "/dvs/right/events"
 event1_frame_width: 346
 event1_frame_height: 260
 event1_accumulated_frame_topic: "/dvs/right/event_frame"  # accumulated frame topic's name, for publishing
-event1_accumulation_method: 0     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
-event1_count_window_size: 12000
+event1_accumulation_method: 0     # 0: by time, 1: by number, 2: time window is sync with events data hz, by number
+event1_number_window_size: 12000
 event1_time_window_size: 33       # ms
 event1_decay_function: 2          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event1_decay_param: 1000000       # us
@@ -94,3 +94,7 @@ event1_rectify_polarity: 0    # enable: 1, disable: 0
 event1_synchronous_decay: 0   # enable: 1, disable: 0
 event1_no_motion_threshold: 1000          # rate: events/s
 ```
+
+## Known Issues
+
+The knoise module is still does not work.

@@ -25,7 +25,7 @@ class DynamicConfigurator {
       const std::shared_ptr<Accumulator>& accumulator,
       const std::shared_ptr<AccumulatorOptions>& options,
       int new_value);
-  static void EventICountWindowSizeCb(
+  static void EventINumberWindowSizeCb(
       const std::shared_ptr<Accumulator>& accumulator,
       const std::shared_ptr<AccumulatorOptions>& options,
       int new_value);

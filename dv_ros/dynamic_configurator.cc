@@ -13,11 +13,11 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
   std::map<std::string, int> accumulation_method_by_time_map = {
       {"BY_TIME", 0},
   };
-  std::map<std::string, int> accumulation_method_by_count_map = {
-      {"BY_COUNT", 1}
+  std::map<std::string, int> accumulation_method_by_number_map = {
+      {"BY_NUMBER", 1}
   };
-  std::map<std::string, int> accumulation_method_by_hz_count_map = {
-      {"BY_EVENTS_HZ_AND_COUNT", 2}
+  std::map<std::string, int> accumulation_method_by_hz_number_map = {
+      {"BY_EVENTS_HZ_AND_NUMBER", 2}
   };
   std::map<std::string, int> decay_function_map = {
       {"NONE", 0},
@@ -50,7 +50,7 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
           "Time window for accumulating, unit. ms",
           1,
           100);
-    } else if (option->accumulation_method == AccumulationMethod::BY_COUNT) {
+    } else if (option->accumulation_method == AccumulationMethod::BY_NUMBER) {
       ddr_.registerEnumVariable<int>(
           eventI_accumulation_method(event_index),
           static_cast<int>(option->accumulation_method),
@@ -59,19 +59,19 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
                       option,
                       _1),
           "Method of accumulating events data",
-          accumulation_method_by_count_map);
+          accumulation_method_by_number_map);
       ddr_.registerVariable<int>(
-          eventI_count_window_size(event_index),
-          option->count_window_size,
-          boost::bind(&DynamicConfigurator::EventICountWindowSizeCb,
+          eventI_number_window_size(event_index),
+          option->number_window_size,
+          boost::bind(&DynamicConfigurator::EventINumberWindowSizeCb,
                       accumulator,
                       option,
                       _1),
-          "Count window for accumulating, unit. num of event",
+          "Number window for accumulating, unit. num of event",
           1000,
           200000);
     } else if (option->accumulation_method
-        == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) {
+        == AccumulationMethod::BY_EVENTS_HZ_AND_NUMBER) {
       ddr_.registerEnumVariable<int>(
           eventI_accumulation_method(event_index),
           static_cast<int>(option->accumulation_method),
@@ -80,15 +80,15 @@ DynamicConfigurator::DynamicConfigurator(const EventCollectors& collectors)
                       option,
                       _1),
           "Method of accumulating events data",
-          accumulation_method_by_hz_count_map);
+          accumulation_method_by_hz_number_map);
       ddr_.registerVariable<int>(
-          eventI_count_window_size(event_index),
-          option->count_window_size,
-          boost::bind(&DynamicConfigurator::EventICountWindowSizeCb,
+          eventI_number_window_size(event_index),
+          option->number_window_size,
+          boost::bind(&DynamicConfigurator::EventINumberWindowSizeCb,
                       accumulator,
                       option,
                       _1),
-          "Count window for accumulating, unit. num of event",
+          "Number window for accumulating, unit. num of event",
           1000,
           200000);
     }
@@ -195,11 +195,11 @@ void DynamicConfigurator::EventIAccumulationMethodCb(
   accumulator->UpdateConfig();
 }
 
-void DynamicConfigurator::EventICountWindowSizeCb(
+void DynamicConfigurator::EventINumberWindowSizeCb(
     const std::shared_ptr<Accumulator>& accumulator,
     const std::shared_ptr<AccumulatorOptions>& options,
     int new_value) {
-  options->count_window_size = new_value;
+  options->number_window_size = new_value;
   accumulator->UpdateConfig();
 }
 

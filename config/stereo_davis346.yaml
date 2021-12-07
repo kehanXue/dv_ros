@@ -7,8 +7,8 @@ event0_topic: "/davis/left/events"
 event0_frame_width: 346
 event0_frame_height: 260
 event0_accumulated_frame_topic: "/davis/left/event_frame"  # accumulated frame topic's name, for publishing
-event0_accumulation_method: 2     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
-event0_count_window_size: 10000
+event0_accumulation_method: 2     # 0: by time, 1: by number, 2: time window is sync with events data hz, by number
+event0_number_window_size: 10000
 event0_time_window_size: 33       # ms
 event0_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event0_decay_param: 0.000001       # us
@@ -25,8 +25,8 @@ event1_topic: "/davis/right/events"
 event1_frame_width: 346
 event1_frame_height: 260
 event1_accumulated_frame_topic: "/davis/right/event_frame"  # accumulated frame topic's name, for publishing
-event1_accumulation_method: 2     # 0: by time, 1: by count, 2: time window is sync with events data hz, by count
-event1_count_window_size: 10000
+event1_accumulation_method: 2     # 0: by time, 1: by number, 2: time window is sync with events data hz, by number
+event1_number_window_size: 10000
 event1_time_window_size: 33       # ms
 event1_decay_function: 3          # 0: None, 1: Linear, 2: Exponential, 3: Step
 event1_decay_param: 0.000001       # us

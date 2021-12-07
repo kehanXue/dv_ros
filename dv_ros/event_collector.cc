@@ -58,13 +58,13 @@ template <typename EventType>
 void EventCollector::ProcessEvents(const EventType& events) {
   dv::EventStore dv_events_;
   if ((options_.accumulator_options.accumulation_method
-      == AccumulationMethod::BY_COUNT ||
+      == AccumulationMethod::BY_NUMBER ||
       options_.accumulator_options.accumulation_method
-          == AccumulationMethod::BY_EVENTS_HZ_AND_COUNT) &&
+          == AccumulationMethod::BY_EVENTS_HZ_AND_NUMBER) &&
       events->events.size()
-          > options_.accumulator_options.count_window_size) {
+          > options_.accumulator_options.number_window_size) {
     for (size_t i = events->events.size()
-        - options_.accumulator_options.count_window_size;
+        - options_.accumulator_options.number_window_size;
          i < events->events.size(); ++i) {
       dv_events_.add(ToDVEvent(ToEvent(events->events.at(i))));
     }
