@@ -15,14 +15,13 @@
 namespace dv_ros {
 
 namespace {
-int kThreadNum = 4;
+int kThreadNum = 8;
 
 class TNoiseThread {
  public:
   TNoiseThread(size_t id, const dv::EventStore& event_store) :
       id_(id),
       event_store_(event_store) {
-    Run();
   }
 
   void Run() {
@@ -61,47 +60,50 @@ class TNoiseThread {
 }  // namespace
 
 void TNoise::ProcessEvents(dv::EventStore& event_store) {
-  std::map<std::pair<int16_t, int16_t>, int8_t> counter;
-  TicToc tic_toc;
-  for (size_t i = 0; i < event_store.getTotalLength(); ++i) {
-    const auto& event = event_store.slice(i).front();
-    auto key = std::make_pair(event.x(), event.y());
-    if (counter.count(key) == 0) {
-      counter.insert({key, 1});
-    } else {
-      counter.insert({key, counter.at(key)++});
-    }
-  }
-  std::cout << "------------" << std::endl;
-  std::cout << "Filter1 cost: " << tic_toc.toc() << " ms" << std::endl;
-
-  TicToc tic_toc2;
-  for (auto event : event_store) {
-    auto key = std::make_pair(event.x(), event.y());
-    if (counter.count(key) == 0) {
-      counter.insert({key, 1});
-    } else {
-      counter.insert({key, counter.at(key)++});
-    }
-  }
-  std::cout << "Filter2 cost: " << tic_toc2.toc() << " ms" << std::endl;
+  // std::map<std::pair<int16_t, int16_t>, int8_t> counter;
+  // for (size_t i = 0; i < event_store.getTotalLength(); ++i) {
+  //   const auto& event = event_store.slice(i).front();
+  //   auto key = std::make_pair(event.x(), event.y());
+  //   if (counter.count(key) == 0) {
+  //     counter.insert({key, 1});
+  //   } else {
+  //     counter.insert({key, counter.at(key)++});
+  //   }
+  // }
+  // std::cout << "------------" << std::endl;
+  // std::cout << "Filter1 cost: " << tic_toc.toc() << " ms" << std::endl;
+  //
+  // TicToc tic_toc2;
+  // for (auto event : event_store) {
+  //   auto key = std::make_pair(event.x(), event.y());
+  //   if (counter.count(key) == 0) {
+  //     counter.insert({key, 1});
+  //   } else {
+  //     counter.insert({key, counter.at(key)++});
+  //   }
+  // }
+  // std::cout << "Filter2 cost: " << tic_toc2.toc() << " ms" << std::endl;
 
   dv::EventStore result_event_store;
-  for (auto event : event_store) {
-    auto key = std::make_pair(event.x(), event.y());
-    if (counter.count(key) != 0 && counter.at(key) > 1) {
-      result_event_store.add(event);
-    }
-  }
+  // for (auto event : event_store) {
+  //   auto key = std::make_pair(event.x(), event.y());
+  //   if (counter.count(key) != 0 && counter.at(key) > 1) {
+  //     result_event_store.add(event);
+  //   }
+  // }
 
-  /*
+  TicToc tic_toc;
   std::vector<TNoiseThread> threads;
   for (size_t id = 0; id < kThreadNum; ++id) {
     threads.emplace_back(id, event_store);
   }
-  for (auto thread : threads) {
+  for (auto& thread : threads) {
+    thread.Run();
+  }
+  for (auto& thread : threads) {
     thread.Join();
   }
+  std::cout << "Filter cost: " << tic_toc.toc() << " ms" << std::endl;
   for (auto event : event_store) {
     size_t count = 0;
     auto key = std::make_pair(event.x(), event.y());
@@ -115,7 +117,6 @@ void TNoise::ProcessEvents(dv::EventStore& event_store) {
       result_event_store.add(event);
     }
   }
-   */
 
   event_store = result_event_store;
 }
