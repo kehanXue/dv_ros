@@ -91,4 +91,8 @@ inline std::string eventI_use_tnoise(size_t event_index) {
   return "event" + std::to_string(event_index) + "_use_tnoise";
 }
 
+inline std::string eventI_tnoise_num_threads(size_t event_index) {
+  return "event" + std::to_string(event_index) + "_tnoise_num_threads";
+}
+
 #endif //DV_ROS_DV_ROS_UTILS_OPTIONS_TOOLS_H_

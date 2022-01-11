@@ -52,6 +52,10 @@ AccumulatorOptions CreateAccumulatorOptions(
     options.k_noise_options =
         CreateKNoiseOptions(config_file_parser, event_index);
   }
+  if (options.use_tnoise) {
+    options.t_noise_options =
+        CreateTNoiseOptions(config_file_parser, event_index);
+  }
   return options;
 }
 

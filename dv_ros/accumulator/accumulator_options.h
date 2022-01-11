@@ -7,6 +7,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "dv_ros/knoise/k_noise_options.h"
+#include "dv_ros/tnoise/t_noise_options.h"
 
 namespace dv_ros {
 
@@ -42,6 +43,7 @@ struct AccumulatorOptions {
   int use_knoise;
   int use_tnoise;
   KNoiseOptions k_noise_options;
+  TNoiseOptions t_noise_options;
 };
 
 AccumulatorOptions CreateAccumulatorOptions(

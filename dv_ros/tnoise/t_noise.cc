@@ -4,36 +4,27 @@
 
 #include "dv_ros/tnoise/t_noise.h"
 
-#include <iostream>
 #include <memory>
-#include <map>
-#include <vector>
+#include <utility>
 #include <thread>
-
-#include "dv_ros/utils/tic_toc.h"
+#include <Eigen/Core>
 
 namespace dv_ros {
 
 namespace {
-int kThreadNum = 8;
 
 class TNoiseThread {
  public:
-  TNoiseThread(size_t id, const dv::EventStore& event_store) :
-      id_(id),
-      event_store_(event_store) {
+  explicit TNoiseThread(dv::EventStore event_store) :
+      event_store_(std::move(event_store)) {
   }
 
-  void Run() {
+  void Run(int frame_height, int frame_width) {
+    counter_.resize(frame_height, frame_width);
+    counter_.setZero();
     const auto& process = [this]() {
-      for (size_t i = id_; i < event_store_.getTotalLength(); i += kThreadNum) {
-        const auto& event = event_store_.slice(i).front();
-        auto key = std::make_pair(event.x(), event.y());
-        if (counter_.count(key) == 0) {
-          counter_.insert({key, 1});
-        } else {
-          counter_.insert({key, counter_.at(key)++});
-        }
+      for (const auto& event : event_store_) {
+        counter_(event.y(), event.x())++;
       }
     };
     thread_ = std::make_shared<std::thread>(process);
@@ -45,79 +36,55 @@ class TNoiseThread {
     }
   }
 
-  [[nodiscard]] const std::map<std::pair<int16_t, int16_t>,
-                               int8_t>& GetCounter() const {
+  const Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic>& GetCounter() {
     return counter_;
   }
 
  private:
-  size_t id_;
-  const dv::EventStore& event_store_;
+  const dv::EventStore event_store_;
   std::shared_ptr<std::thread> thread_;
-  std::map<std::pair<int16_t, int16_t>, int8_t> counter_;
+  Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic> counter_;
 };
 
 }  // namespace
 
-void TNoise::ProcessEvents(dv::EventStore& event_store) {
-  // std::map<std::pair<int16_t, int16_t>, int8_t> counter;
-  // for (size_t i = 0; i < event_store.getTotalLength(); ++i) {
-  //   const auto& event = event_store.slice(i).front();
-  //   auto key = std::make_pair(event.x(), event.y());
-  //   if (counter.count(key) == 0) {
-  //     counter.insert({key, 1});
-  //   } else {
-  //     counter.insert({key, counter.at(key)++});
-  //   }
-  // }
-  // std::cout << "------------" << std::endl;
-  // std::cout << "Filter1 cost: " << tic_toc.toc() << " ms" << std::endl;
-  //
-  // TicToc tic_toc2;
-  // for (auto event : event_store) {
-  //   auto key = std::make_pair(event.x(), event.y());
-  //   if (counter.count(key) == 0) {
-  //     counter.insert({key, 1});
-  //   } else {
-  //     counter.insert({key, counter.at(key)++});
-  //   }
-  // }
-  // std::cout << "Filter2 cost: " << tic_toc2.toc() << " ms" << std::endl;
 
-  dv::EventStore result_event_store;
-  // for (auto event : event_store) {
-  //   auto key = std::make_pair(event.x(), event.y());
-  //   if (counter.count(key) != 0 && counter.at(key) > 1) {
-  //     result_event_store.add(event);
-  //   }
-  // }
+TNoise::TNoise(const TNoiseOptions& options)
+    : options_(options) {
 
-  TicToc tic_toc;
+}
+
+void TNoise::ProcessEvents(dv::EventStore& event_store) const {
+  size_t sub_length = event_store.getTotalLength() / options_.num_threads;
   std::vector<TNoiseThread> threads;
-  for (size_t id = 0; id < kThreadNum; ++id) {
-    threads.emplace_back(id, event_store);
+  for (size_t i = 0; i < event_store.getTotalLength(); i += sub_length) {
+    size_t length = sub_length;
+    if (i + sub_length >= event_store.getTotalLength()) {
+      length = event_store.getTotalLength() - i;
+    }
+    auto sub_event_store = event_store.slice(i, length);
+    threads.emplace_back(sub_event_store);
   }
   for (auto& thread : threads) {
-    thread.Run();
+    thread.Run(options_.frame_height, options_.frame_width);
   }
   for (auto& thread : threads) {
     thread.Join();
   }
-  std::cout << "Filter cost: " << tic_toc.toc() << " ms" << std::endl;
+
+  Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic> counter;
+  counter.resize(options_.frame_height, options_.frame_width);
+  counter.setZero();
+  for (size_t id = 0; id < options_.num_threads; ++id) {
+    const auto& sub_counter = threads.at(id).GetCounter();
+    counter += sub_counter;
+  }
+  dv::EventStore result_event_store;
   for (auto event : event_store) {
-    size_t count = 0;
-    auto key = std::make_pair(event.x(), event.y());
-    for (size_t id = 0; id < kThreadNum; ++id) {
-      const auto& counter = threads.at(id).GetCounter();
-      if (counter.count(key) != 0) {
-        count += counter.at(key);
-      }
-    }
-    if (count > 1) {
+    if (counter(event.y(), event.x()) > 1) {
       result_event_store.add(event);
     }
   }
-
   event_store = result_event_store;
 }
 

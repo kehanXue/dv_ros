@@ -14,6 +14,9 @@ Accumulator::Accumulator(const AccumulatorOptions& options)
   if (options_->use_knoise) {
     k_noise_filter_ = std::make_shared<KNoise>(options_->k_noise_options);
   }
+  if (options_->use_tnoise) {
+    t_noise_filter_ = std::make_shared<TNoise>(options_->t_noise_options);
+  }
   accumulated_frame_pub_ =
       nh_.advertise<sensor_msgs::Image>(options_->accumulated_frame_topic, 2);
   accumulator_ =
@@ -60,9 +63,9 @@ void Accumulator::AddNewEvents(dv::EventStore& event_store) {
   } else if (options_->accumulation_method
       == AccumulationMethod::BY_EVENTS_HZ_AND_NUMBER) {
     event_store_.add(event_store);
-    if (options_->use_knoise) {
-      k_noise_filter_->ProcessEvents(event_store_);
-    }
+    // if (options_->use_knoise) {
+    //   k_noise_filter_->ProcessEvents(event_store_);
+    // }
     DoPerAddEventData();
   } else {
     ROS_ERROR("Unrecognized accumulation method selected");
@@ -96,16 +99,12 @@ void Accumulator::DoPerAddEventData() {
 }
 
 void Accumulator::ElaborateFrame(const dv::EventStore& events) {
-  // if (options_->use_knoise) {
-  //   dv::EventStore event_store = events;
-  //   k_noise_filter_->ProcessEvents(event_store);
-  //   accumulator_.accumulate(event_store);
-  // } else {
-  // }
   auto events_to_elaborate = events;
+  TicToc tic_toc;
   if (options_->use_tnoise) {
-    TNoise::ProcessEvents(events_to_elaborate);
+    t_noise_filter_->ProcessEvents(events_to_elaborate);
   }
+  std::cout << tic_toc.toc() << " ms" << std::endl;
   accumulator_.accumulate(events_to_elaborate);
   // generate frame
   auto frame = accumulator_.generateFrame();

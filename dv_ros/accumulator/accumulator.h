@@ -16,6 +16,7 @@
 
 #include "dv_ros/accumulator/accumulator_options.h"
 #include "dv_ros/knoise/k_noise.h"
+#include "dv_ros/tnoise/t_noise.h"
 
 namespace dv_ros {
 
@@ -48,6 +49,7 @@ class Accumulator {
   ros::Publisher accumulated_frame_pub_;
 
   std::shared_ptr<KNoise> k_noise_filter_;
+  std::shared_ptr<TNoise> t_noise_filter_;
 };
 
 }  // namespace dv_ros

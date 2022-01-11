@@ -27,6 +27,7 @@ find_package(Boost REQUIRED COMPONENTS filesystem)
 find_package(OpenCV 3.3.1 REQUIRED)
 find_package(dv REQUIRED)
 find_package(fmt 7.0.3 REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 catkin_package(
   #  INCLUDE_DIRS include
@@ -37,6 +38,7 @@ catkin_package(
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIR}
   ${CMAKE_SOURCE_DIR}
 )
 

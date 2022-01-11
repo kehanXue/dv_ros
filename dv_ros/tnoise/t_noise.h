@@ -7,11 +7,17 @@
 
 #include "dv-sdk/processing.hpp"
 
+#include <dv_ros/tnoise/t_noise_options.h>
+
 namespace dv_ros {
 
 class TNoise {
  public:
-  static void ProcessEvents(dv::EventStore& event_store);
+  explicit TNoise(const TNoiseOptions& options);
+  void ProcessEvents(dv::EventStore& event_store) const;
+
+ private:
+  TNoiseOptions options_;
 };
 
 }  // namespace dv_ros
