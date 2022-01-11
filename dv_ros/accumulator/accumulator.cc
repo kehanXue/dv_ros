@@ -4,6 +4,7 @@
 
 #include "dv_ros/accumulator/accumulator.h"
 #include "dv_ros/utils/tic_toc.h"
+#include "dv_ros/tnoise/t_noise.h"
 
 namespace dv_ros {
 
@@ -101,7 +102,11 @@ void Accumulator::ElaborateFrame(const dv::EventStore& events) {
   //   accumulator_.accumulate(event_store);
   // } else {
   // }
-  accumulator_.accumulate(events);
+  auto events_to_elaborate = events;
+  if (options_->use_tnoise) {
+    TNoise::ProcessEvents(events_to_elaborate);
+  }
+  accumulator_.accumulate(events_to_elaborate);
   // generate frame
   auto frame = accumulator_.generateFrame();
   // make sure frame is in correct exposure and data type

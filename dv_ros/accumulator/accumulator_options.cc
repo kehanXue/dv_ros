@@ -46,6 +46,8 @@ AccumulatorOptions CreateAccumulatorOptions(
       config_file_parser[eventI_no_motion_threshold(event_index)];
   options.use_knoise =
       config_file_parser[eventI_use_knoise(event_index)];
+  options.use_tnoise =
+      config_file_parser[eventI_use_tnoise(event_index)];
   if (options.use_knoise) {
     options.k_noise_options =
         CreateKNoiseOptions(config_file_parser, event_index);

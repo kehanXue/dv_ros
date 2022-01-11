@@ -40,6 +40,7 @@ struct AccumulatorOptions {
   std::string accumulated_frame_topic;
   int no_motion_threshold;
   int use_knoise;
+  int use_tnoise;
   KNoiseOptions k_noise_options;
 };
 
