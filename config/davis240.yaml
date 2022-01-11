@@ -21,7 +21,6 @@ event0_rectify_polarity: 1    # enable: 1, disable: 0
 event0_synchronous_decay: 0   # enable: 1, disable: 0
 event0_no_motion_threshold: 1000      # rate: events/s
 event0_use_tnoise: 1    # enable: 1, disable: 0
-event0_tnoise_num_threads: 1
 
 # Decay function: Linear
 # event0_device_type: 0                   # 0: davis, 1: celex

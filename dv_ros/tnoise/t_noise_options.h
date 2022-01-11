@@ -12,7 +12,6 @@ namespace dv_ros {
 struct TNoiseOptions {
   int frame_width;
   int frame_height;
-  int num_threads;
 };
 
 TNoiseOptions CreateTNoiseOptions(const cv::FileStorage& config_file_parser,

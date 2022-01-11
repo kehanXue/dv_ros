@@ -14,8 +14,6 @@ TNoiseOptions CreateTNoiseOptions(const cv::FileStorage& config_file_parser,
       config_file_parser[eventI_frame_width(event_index)];
   options.frame_height =
       config_file_parser[eventI_frame_height(event_index)];
-  options.num_threads =
-      int(config_file_parser[eventI_tnoise_num_threads(event_index)]);
   return options;
 }
 

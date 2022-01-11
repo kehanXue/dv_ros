@@ -100,11 +100,9 @@ void Accumulator::DoPerAddEventData() {
 
 void Accumulator::ElaborateFrame(const dv::EventStore& events) {
   auto events_to_elaborate = events;
-  TicToc tic_toc;
   if (options_->use_tnoise) {
     t_noise_filter_->ProcessEvents(events_to_elaborate);
   }
-  std::cout << tic_toc.toc() << " ms" << std::endl;
   accumulator_.accumulate(events_to_elaborate);
   // generate frame
   auto frame = accumulator_.generateFrame();
